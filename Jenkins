@@ -1,33 +1,37 @@
-pipeline {
-    agent any
-
-    stages {
-        stage('Build') {
-            steps {
-                echo 'Building..'
-            }
+pipeline
+{
+  environment
+  {
+    registry = "naheen2001/newimage01"
+    registryCredential = 'dockerid'
+    dockerImage  = ''
+  }
+  agent any
+ 
+  stages
+  {
+    stage('Build image')
+    {
+      steps
+      {
+        script
+        {
+          dockerImage = docker.build registry + ":$BUILD_NUMBER"
         }
-        stage('Test') {
-            steps {
-                echo 'Testing..'
-            }
+      }
+    }
+    stage('Deploy the image')
+    {
+      steps
+      {
+        script
+        {
+          docker.withRegistry( '',registryCredential )
+          {
+            dockerImage.push()
+          }
         }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
-            }
-        }
+      }
     }
-}
-// Script //
-node {
-    stage('Build') {
-        echo 'Building....'
-    }
-    stage('Test') {
-        echo 'Building....'
-    }
-    stage('Deploy') {
-        echo 'Deploying....'
-    }
+  }
 }
