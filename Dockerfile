@@ -2,5 +2,5 @@
 FROM openjdk:17
 COPY . /src/java
 WORKDIR /src/java
-RUN ["javac","HelloWorld.java"]
-ENTRYPOINT ["java","HelloWorld"]
+RUN ["javac","Hello.java"]
+ENTRYPOINT ["java","Hello"]
